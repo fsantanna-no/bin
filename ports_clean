@@ -1,0 +1,10 @@
+#!/bin/sh
+
+find /usr/ports -type d -name "work" -print | while read PATH
+do
+	DIR=`/usr/bin/dirname $PATH`
+	echo Limpando $DIR...
+	cd $DIR
+	sudo make clean
+	cd -
+done

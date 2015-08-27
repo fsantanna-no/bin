@@ -1,0 +1,11 @@
+#!/bin/sh
+
+DPY=":1.0"
+RES="640x480"
+
+Xephyr $DPY -ac -screen $RES "$@" &
+sleep 1
+#DISPLAY=$DPY /opt/dwm/dwm
+#DISPLAY=$DPY /opt/WMs/monsterwm-xcb/monsterwm
+#DISPLAY=$DPY /opt/WMs/tinywm/tinywm
+DISPLAY=$DPY /opt/WMs/wmceu/wmceu

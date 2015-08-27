@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd ~/Mp3/Novos
+
+sudo dagrab -i | awk '/audio/ { print $1 }' | xargs sudo dagrab -v
+bladeenc *.wav
+rm *.wav

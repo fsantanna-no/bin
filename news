@@ -1,0 +1,21 @@
+#!/bin/sh
+
+case $1 in
+
+post)
+	sudo /usr/local/sbin/fetchnews -P
+	;;
+
+fetch)
+	sudo /usr/local/sbin/fetchnews -vvvv -n
+	;;
+
+texpire)
+	sudo /usr/local/sbin/texpire
+	;;
+
+*)
+	echo "uso: news fetch|texpire"
+	;;
+
+esac

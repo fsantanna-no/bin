@@ -1,0 +1,5 @@
+#!/bin/awk -f
+
+BEGIN	{ tot = 0 }
+		{ print $9, "\t", $5; tot += $5 }
+END		{ print "\t\t", tot }

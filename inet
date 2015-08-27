@@ -1,0 +1,155 @@
+#!/bin/bash
+
+#PATH=$PATH:/usr/local/bin
+
+echo INET...
+
+# FUNCOES DE SUPORTE
+source /etc/bashrc
+
+# tem que ser antes do is_up()
+$CONF/xmouse.sh fora
+
+# GATEWAYS DOS LOCAIS
+CASA=server
+NETOPEN=nas
+
+# AUTO
+LOCAL=
+if [ "$1" = "auto" ]
+then
+	[ -z $LOCAL ] && is_up $CASA   	&& LOCAL=casa
+	#[ -z $LOCAL ] && is_up $NETOPEN	&& LOCAL=netopen
+	[ -z $LOCAL ] && LOCAL=puc
+else
+	LOCAL=$1
+fi
+echo $LOCAL > /var/run/inet
+	
+# OUTROS
+case $LOCAL in
+casa)
+	NET=10.0.0.100
+	MASK=255.255.255.0
+	GATE=$CASA
+	echo "Local: Casa!"
+	;;
+netopen)
+	NET=200.0.69.9
+	MASK=255.255.255.0
+	GATE=$NETOPEN
+	echo "Local: Net-open!"
+	;;
+puc)
+	echo "Local: PUC!"
+	;;
+erro)
+	echo "Não foi possível determinar o local!"
+	exit 2
+	;;
+*)
+	echo "local inválido: $LOCAL"
+	echo "uso: inet auto|netopen|casa"
+	exit 1
+	;;
+esac
+
+route delete default > /dev/null 2>&1
+
+if [ "$LOCAL" != "puc" ]
+then
+	route add default gw $GATE > /dev/null 2>&1
+fi
+
+case $LOCAL in
+
+### NETOPEN ###
+
+netopen)
+	echo -n auth...
+	if wget -t 1 http://nas:2000/cgi-bin/aclnas.php?do=entrar\&nomeUsuario=francisco\&senhaUsuario=linux 2>&1 | grep "confgeralnas" | grep "saved" > /dev/null 2>&1
+	then
+		echo ' OK!'
+	else
+		echo ' NAO!'
+	fi
+	rm -f confgeralnas.php*
+
+	echo -n nfs...
+	if mount /chico/Netopen/Zyt
+	then
+		echo ' OK!'
+	else
+		echo ' NAO!'
+	fi
+
+	echo -n mouse ps/2...
+	/chico/bin/xmouse.sh fora
+
+	;;
+
+### CASA ###
+
+casa)
+	echo mouse wheel...
+	$CONF/xmouse.sh casa
+
+	#echo nfs...
+	#mount server:/ /server
+	#mount server:/usr /server/usr
+	#mount server:/var /server/var
+	#mount_smbfs -I 10.0.0.5 //chico@server/tmp /mnt
+
+	ccbackup all &
+	#ccbackup data & -> muito lento
+
+	cd /chico/Server
+
+	NOW=`date "+%s"`
+	ULT=`cat timestamp.txt`
+	DIF=`expr $NOW - $ULT - 1296000`
+
+	if [ "$DIF" -gt "0" ]
+	then
+		echo nmap...
+		nmap server > nmap_server_new.txt
+		echo email...
+		diff nmap_server.txt nmap_server_new.txt | mail -s "NMAP diff" chico
+		mv nmap_server_new.txt nmap_server.txt
+		date "+%s" > timestamp.txt
+
+		#/chico/bin/backup chico.data &
+	fi
+
+	cd -
+	;;
+
+puc)
+	echo mouse ps/2...
+	$CONF/xmouse.sh fora
+	/sbin/dhclient -1 eth0
+	;;
+
+*)
+	echo mouse normal...
+
+esac
+
+### FIM ###
+
+#echo -n sendmail...
+#if sendmail -bd
+#then
+	#echo ' OK!'
+#else
+	#echo ' NAO!'
+#fi
+
+#echo -n fetchmail...
+#if fetchmail -f /chico/Conf/fetchmail.rc > /dev/null 2>&1
+#if fetchmail -f /chico/Conf/fetchmail.rc
+#then
+	#echo ' OK!'
+#else
+	#echo ' NAO!'
+#fi

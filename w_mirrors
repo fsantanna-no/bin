@@ -1,0 +1,16 @@
+#/bin/sh
+
+wget -P /chico/Temp/Mirrors -m http://www.freebsd.ag.com.br/
+
+wget -P /chico/Temp/Mirrors -m http://www.psyon.org/archive/e-books/index.shtml
+wget -P /chico/Temp/Mirrors -m http://dsl.org/cookbook/
+
+wget -P /chico/Temp/Mirrors -r -l1 -p http://guia-er.sourceforge.net/index.html
+
+# Peguei
+
+# Livro sobre DOCBOOK
+#wget -P /chico/Temp/Mirrors -r -l1 -p http://www.oreilly.com/catalog/docbook/chapter/book/docbook.html
+
+# Livro sobre Linux Administração
+#wget -P /chico/Temp/Mirrors -r -l1 -p http://www.oreilly.com/catalog/linag2/book/index.html

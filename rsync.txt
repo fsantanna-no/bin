@@ -1,0 +1,55 @@
+CCREADME: Como funciona o rsync ?
+
+---------
+SERVIDOR:
+---------
+
+O arquivo "/usr/local/etc/rsyncd.conf" configura o que é para ser backupeado:
+
+TARGET SERVER	PATH
+-------------	------------------
+
+Diretórios do Linux pequenos, com muitas alterações:
+
+[ etc ]		/data/backup/etc
+[ local ]	/data/backup/local
+[ chico ]	/data/backup/chico
+[ www ]		/data/backup/www
+[ mysql ]	/data/backup/mysql
+
+Diretório massivo de dados, tanto Linux, como Windows,
+	atualizar de vez em quando:
+
+[ data ]	/data
+
+--------
+CLIENTE:
+--------
+
+O arquivo "Conf/backup.mk" configura o que backupear:
+
+[ all ] corresponde a [ etc ] [ local ] [ chico ] [ www ]
+
+-v		Verbose
+-a		Archive/Recursion, preserva owner, links, gzip, como no tar.
+--delete	Apaga arquivos no servidor que não existem mais no cliente.
+		Por isso é necessário backup em CD do "/data/backup" no server.
+--include	Transfere os arquivos/diretório listados.
+--exclude	Não transfere os arquivos/diretório listados.
+
+TARGET CLIENT	PATH		TARGET SERVER	OPCOES
+-------------	----------	-------------	------
+[ etc ]		/etc		[ etc ]		-a --delete
+[ local ]	/usr/local	[ local ]	-a --delete
+[ chico ]	/chico		[ chico ]	-a --delete
+[ www ]		/www		[ www ]		-a --delete
+[ mysql ]	-		-
+[ data ]	/data		[ data ]	-a --delete --include --exclude
+
+[ data ] inclui apenas Doc/, Files/ e Temp/
+
+Para executar:
+--------------
+ccbackup target
+
+A idéia é rodar [ all ] sempre que entrar na rede e [ data ] de vez em quando.

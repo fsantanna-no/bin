@@ -1,0 +1,22 @@
+Usr				/usr/share/doc
+Temp				/chico/Temp
+Doc				/chico/Doc
+
+FreeBSD Handbook		/usr/share/doc/handbook/index.html
+FreeBSD Primeiros Passos	/chico/Temp/Mirrors/www.freebsd.ag.com.br/index.html
+
+PHP Manual			/chico/Doc/Web/Php/Manual/index.html
+CSS Reference			/chico/Doc/Web/Css/Css2/cover.html#minitoc
+Java Script Reference		/chico/Doc/Web/Js/contents.htm
+
+Programming in C		/chico/Doc/Prog/C/C/index.html
+Shell Programming		/chico/Doc/Unix/Sh/sh_prog.html
+Glut Reference			/chico/Doc/Cgi/glutspec3/node1.html
+
+MySQL Manual			/usr/local/share/doc/mysql/manual_toc.html
+
+JDK				/chico/Doc/Prog/Java/Oficial/index.html
+Tomcat				/usr/local/tomcat/doc/index.html
+JDBC MySQL			/usr/local/share/doc/mysql-jdbc/mm.doc/book1.html
+
+RRD Tool			/usr/local/share/doc/rrdtool/html/rrdtool.html

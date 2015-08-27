@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+
+print "Transformado por html2txt em " . `date` . "\n";
+
+$html = join ('',<>);
+
+print "Links nesta página:\n";
+while ( $html =~ s/<a href=([^\s>]*[^>]*)>([^<]*)<\/a>/<link>$2<\/link>/is ) {
+	print "$1:\t$2\n";
+}
+
+# \n por \s
+$html =~ s/\n/ /isg;
+
+# \s+ por \s
+$html =~ s/\s+/ /isg;
+
+# <p> por \n\n
+$html =~ s/<p[^>]*>/\n\n/isg;
+
+# <br> por \n
+$html =~ s/<br>/\n\n/isg;
+
+# <hr> por ---
+$html =~ s/<hr[^>]*>/\n--------------------\n/isg;
+
+# tags s/ param para ignorar
+foreach ('u', 'b', 'i', 'strong', 'sup', 'cite', 'center', '\/p', '\/td', '\/dd', '\/th', '\/tr', '\/li', 'tt', 'blockquote', 'blink') {
+	$html =~ s/<\/?$_>//isg;
+}
+
+# tags c/ param para ignorar
+# TEMP, img
+foreach ('img', 'html', 'head', 'body', 'font', 'table', 'a', 'meta', 'div') {
+	$html =~ s/<.?$_[^>]*>//isg;
+}
+
+# comentarios
+$html =~ s/<\![^>]*>//isg;
+
+# caract esp / acentos
+$html =~ s/\&nbsp;/ /isg;
+$html =~ s/\&lt;/</isg;
+$html =~ s/\&gt;/>/isg;
+$html =~ s/\&atilde;/ã/isg;
+$html =~ s/\&aacute;/á/isg;
+$html =~ s/\&eacute;/é/isg;
+$html =~ s/\&iacute;/í/isg;
+$html =~ s/\&oacute;/ó/isg;
+$html =~ s/\&uacute;/ú/isg;
+$html =~ s/\&ccedil;/ç/isg;
+$html =~ s/\&acirc;/â/isg;
+$html =~ s/\&ecirc;/ê/isg;
+$html =~ s/\&ocirc;/ô/isg;
+
+# headers
+$html =~ s/<h\d[^>]*>([^<]*)<\/h\d>/\n\n$1\n\n/isg;
+
+# tabelas
+$html =~ s/<tr[^>]*>/\n/isg;
+$html =~ s/<td[^>]*>/\t/isg;
+$html =~ s/<th[^>]*>/\t/isg;
+
+# listas
+$html =~ s/<\/?ul>/\n/isg;
+$html =~ s/<li>/\n\t/isg;
+$html =~ s/<dd>/\t/isg;
+
+# \s+ por \s
+$html =~ s/\s+/ /isg;
+$html =~ s/\n+/\n/isg;
+
+print "\n--- INICIO ---\n\n$html\n";

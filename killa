@@ -1,0 +1,23 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+then
+   printf "Usage: killa name\n"
+   exit 1
+fi
+
+# acha linha que "batem"
+ps ax | grep -v "grep $1" | grep -v $0 | grep $1 |
+
+# filtra numeros dos processos
+awk '{ print $1 }' |
+
+# mata um a um
+while read pid
+do
+	kill $pid
+	if [ $? -ne 0 ]
+	then
+		kill -9 $pid
+	fi
+done
